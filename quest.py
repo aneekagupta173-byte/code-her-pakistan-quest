@@ -1,4 +1,9 @@
+import os
 import random 
+import tkinter as tk
+from tkinter import messagebox
+
+root= tk.Tk()
 
 print("===============================")
 print("Welcome to the Realm! 🌟")
