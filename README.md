@@ -1,8 +1,72 @@
-# code-her-pakistan-quest
-I attended a 3-session workshop by Code-Her Pakistan. i was also awarded a certificate !!! Well as our last challenge we given to make a project(out of 3 options)  and complete this side quest! So i made a to-do-list app and a small game. 
+# 🌟 Code-Her Pakistan Quest
 
+## About the Workshop
 
-quest.py is a small game made according to the small guide that was provided. though i am still working on refininng the gam, here is a small draft for my plan with the actual game. :)
+I had the opportunity to attend a **3-session Python workshop** hosted by **Code-Her Pakistan**, where I learned Python fundamentals and worked on hands-on challenges. After successfully completing the workshop, I was awarded a **Certificate of Completion**. 🎉
 
+As our final challenge, we were asked to choose one of three project options and complete a side quest. This repository contains my submissions for that challenge.
 
-to-do-list-app.py is a simple to do app that can add on tasks as many times as you want , delete them  even add a time stamp next to it. it is a very simple , easy to use app for those who find it hard to manage those confusing apps out there. just make a to do list every morning and complete it by evening. Literally living day-to-day. 
+---
+
+## 📂 Projects
+
+### 🎮 Quest Game (`quest.py`)
+
+A small Python adventure game created based on the guide provided during the workshop.
+
+Although this is an early version, it represents the foundation of a larger game I plan to continue developing. I'm currently working on refining the gameplay, improving the story, and adding more interactive features.
+
+**Future Improvements**
+- Better game mechanics
+- More choices and branching paths
+- Improved user experience
+- Additional levels and challenges
+
+---
+
+### ✅ To-Do List App (`to-do-list-app.py`)
+
+A simple command-line to-do list application designed to make task management quick and easy.
+
+### Features
+- ➕ Add unlimited tasks
+- ❌ Delete completed tasks
+- 🕒 Add timestamps to tasks
+- 📋 View your complete task list
+
+The idea behind this project was to create a lightweight productivity tool without the complexity of many modern task management apps.
+
+> *Create your to-do list in the morning, finish it by the evening—one day at a time.*
+
+---
+
+## 🛠️ Built With
+
+- Python
+
+---
+
+## 📚 What I Learned
+
+Through this workshop and challenge, I gained experience with:
+- Python fundamentals
+- Functions
+- Loops and conditionals
+- Lists and dictionaries
+- User input handling
+- Problem-solving
+- Building small command-line applications
+
+---
+
+## 🚀 Future Plans
+
+This repository marks an important milestone in my Python learning journey. As I continue learning, I plan to:
+- Improve the existing projects
+- Add more features
+- Refactor the code for better readability
+- Build more advanced Python applications
+
+---
+
+⭐ Thank you for visiting this repository! Feel free to explore the projects and follow my coding journey.
