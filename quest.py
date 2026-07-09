@@ -1,238 +1,316 @@
-import os
-import random 
+import random
 import tkinter as tk
-from tkinter import messagebox
-
-root= tk.Tk()
-
-print("===============================")
-print("Welcome to the Realm! 🌟")
-print("===============================")
-name = input("What is your name, brave adventurer? ").strip().lower()
+from tkinter import ttk
 
 
+class AdventureApp:
+    def __init__(self, root):
+        self.root = root
+        root.title("Apple Quest")
+        root.geometry("860x620")
+        root.resizable(False, False)
+        root.configure(bg="#121B28")
 
-strength = 20
-health = 20
+        self.style = ttk.Style(root)
+        self.style.theme_use("clam")
+        self.style.configure("TFrame", background="#121B28")
+        self.style.configure("Card.TFrame", background="#1F2F43", relief="flat")
+        self.style.configure("Title.TLabel", font=("Segoe UI", 24, "bold"), foreground="#F8D36B", background="#121B28")
+        self.style.configure("Sub.TLabel", font=("Segoe UI", 12), foreground="#DDE7F0", background="#121B28")
+        self.style.configure("Body.TLabel", font=("Segoe UI", 11), foreground="#EFF4FA", background="#1F2F43")
+        self.style.configure("Small.TLabel", font=("Segoe UI", 10), foreground="#A6B7CE", background="#1F2F43")
+        self.style.configure("TButton", font=("Segoe UI", 11, "bold"), foreground="#1F2F7F", background="#F8D36B")
+        self.style.map("TButton", background=[("active", "#F4E29E")])
 
-print(f"\nWelcome, {name}! 🧙")
-print(f"You are a brave adventurer with {strength} strength and {health} health.\n")
-print("You come from a poor family in a small village. 🏡")
-print("You must collect apples to help your family survive the harsh winter. 🍎")
-print("The forest is full of dangerous creatures and obstacles. 🌲")
-print("You must navigate the forest, gather apples, and return home safely. 🛣️\n")
-print("There are animals and forest dwellers waiting to eat your apples and YOU! 🐺")
-print("Your mother gives you 3 potions to choose from. 🧪")
-print("Each potion changes your strength and health in a different way. ✨\n")
-print("1. The warrior potion: gives you +5 strength but -5 health ⚔️")
-print("2. The woodcutter potion: gives you +5 health but -5 strength 🪓")
-print("3. The quiet walker potion: gives you -3 strength and +3 health 👣")
+        self.name = "John"
+        self.strength = 20
+        self.health = 20
+        self.apples = 0
+        self.bonus_item = random.choice(["a magical sword", "15 gold coins", "a treasure map"])
 
-choice = ""
+        self.main_frame = ttk.Frame(root, style="TFrame", padding=18)
+        self.main_frame.pack(fill="both", expand=True)
 
-while choice not in ["1", "2", "3"]:
-    choice = input("Which potion do you choose? (1, 2, or 3): ")
-    print("----------------\n---------------------\n")
+        self.header = ttk.Frame(self.main_frame, style="TFrame")
+        self.header.pack(fill="x", pady=(0, 12))
 
-    if choice == "1":
-        strength += 5
-        health -= 5
-        print(f"You chose the warrior potion! Your strength is now {strength} and your health is now {health}.")
-    elif choice == "2":
-        strength -= 5
-        health += 5
-        print(f"You chose the woodcutter potion! Your strength is now {strength} and your health is now {health}.")
-    elif choice == "3":
-        strength -= 3
-        health += 3
-        print(f"You chose the quiet walker potion! Your strength is now {strength} and your health is now {health}.")
-    else:
-        print("Invalid choice. Please enter 1, 2, or 3.")
-        print("Your strength and health remain the same.")
+        self.title_label = ttk.Label(self.header, text="Apple Quest", style="Title.TLabel")
+        self.title_label.pack(anchor="w")
 
+        self.subtitle_label = ttk.Label(
+            self.header,
+            text="A cozy forest adventure where every choice makes a difference.",
+            style="Sub.TLabel",
+        )
+        self.subtitle_label.pack(anchor="w", pady=(4, 0))
 
+        self.status_card = ttk.Frame(self.main_frame, style="Card.TFrame", padding=12)
+        self.status_card.pack(fill="x", pady=(0, 12))
 
+        self.strength_label = ttk.Label(self.status_card, text="Strength: 20", style="Small.TLabel")
+        self.health_label = ttk.Label(self.status_card, text="Health: 20", style="Small.TLabel")
+        self.apples_label = ttk.Label(self.status_card, text="Apples: 0", style="Small.TLabel")
 
+        self.strength_label.grid(row=0, column=0, padx=10, pady=4, sticky="w")
+        self.health_label.grid(row=0, column=1, padx=10, pady=4, sticky="w")
+        self.apples_label.grid(row=0, column=2, padx=10, pady=4, sticky="w")
 
-apples = 0
-print("Let's go to the forest! 🌲")
+        self.story_card = ttk.Frame(self.main_frame, style="Card.TFrame", padding=14)
+        self.story_card.pack(fill="both", expand=True)
 
-print("---------------------------------------")
-print("You are walking through the forest when you hear a rustling in the bushes. 🌳")
-print("A wild boar! 🐗 It looks angry and is charging towards you!")
+        self.story_label = ttk.Label(
+            self.story_card,
+            text="",
+            style="Body.TLabel",
+            wraplength=800,
+            justify="left",
+        )
+        self.story_label.pack(fill="both", expand=True)
 
-action = input("What do you want to do? Enter: fight, run or hide ").strip().lower()
+        self.buttons_card = ttk.Frame(self.main_frame, style="Card.TFrame", padding=12)
+        self.buttons_card.pack(fill="x", pady=(12, 0))
 
-if action == "fight":
-    if strength > 15:
-        print("You fought bravely and defeated the boar! 🏆")
-        health -= 5
-    else:
-        print("You tried to fight the boar but it was too strong! 😢")
-        health -= 10
-elif action == "run":
-    print("You ran away safely, but you dropped some apples. 🍎")
-    health -= 2
-elif action == "hide":
-    print("You hid behind a tree and the boar ran away. 🏃‍♂️")
-    health -= 1
-else:
-    print("Invalid action. You hesitated and the boar attacked you! 😱")
-    health -= 10
+        self.choice_buttons = [ttk.Button(self.buttons_card) for _ in range(4)]
+        for index, button in enumerate(self.choice_buttons):
+            button.grid(row=index // 2, column=index % 2, padx=8, pady=8, sticky="ew")
+        self.buttons_card.columnconfigure(0, weight=1)
+        self.buttons_card.columnconfigure(1, weight=1)
 
-print(f"Your health is now {health}.")
+        self.input_card = ttk.Frame(self.main_frame, style="Card.TFrame", padding=12)
+        self.input_card.pack(fill="x", pady=(12, 0))
 
-print("You continue your journey through the forest and find a clearing with a beautiful apple tree. 🍏")
-print("But the apples are too high to reach. You need to find a way to get them down.")
-action2 = input("What do you want to do? Enter: climb, shake or use your sword ").strip().lower()
+        self.name_prompt = ttk.Label(self.input_card, text="Your name:", style="Small.TLabel")
+        self.name_entry = ttk.Entry(self.input_card, font=("Segoe UI", 11))
+        self.start_button = ttk.Button(self.input_card, text="Begin Adventure", command=self.start_adventure)
 
-if action2 == "climb":
-    if strength > 15:
-        print("You climbed the tree and picked some apples! 🍎")
-        health -= 2
-        apples += 5
-    else:
-        print("You tried to climb the tree but fell and got injured! 😢")
-        health -= 10
-elif action2 == "shake":
-    print("You shook the tree and some apples fell down! 🍏")
-    health -= 1
-    apples += 3
-elif action2 == "use your sword":
-    print("You used your sword to cut down some apples! 🍎")
-    health -= 3
-    apples += 4
-else:
-    print("Invalid action. You stood still and missed your chance. 😅")
+        self.name_prompt.grid(row=0, column=0, padx=(0, 8), pady=4, sticky="w")
+        self.name_entry.grid(row=0, column=1, padx=(0, 8), pady=4, sticky="ew")
+        self.start_button.grid(row=0, column=2, pady=4)
+        self.input_card.columnconfigure(1, weight=1)
 
-print(f"Your health is now {health}.")
-print(f"You have {apples} apples.")
+        self.name_entry.insert(0, "John")
+        self.show_intro()
 
-print("BONUS: YOU FOUND SOMETHING.")
+    def update_status(self):
+        self.strength_label.config(text=f"Strength: {self.strength}")
+        self.health_label.config(text=f"Health: {self.health}")
+        self.apples_label.config(text=f"Apples: {self.apples}")
 
-list = ["A magical sword! 🗡️", "15 gold coins! 💰", "A treasure map! 🗺️"]
+    def set_story(self, text, options):
+        self.story_label.config(text=text)
+        for button in self.choice_buttons:
+            button.grid_remove()
 
-bonus_item = random.choice(list)
-print(f"You found a {bonus_item}!")
+        for index, (label, callback) in enumerate(options):
+            if index < len(self.choice_buttons):
+                button = self.choice_buttons[index]
+                button.config(text=label, command=callback)
+                button.grid()
 
-print("You continue your journey through the forest and find a clearing with a beautiful apple tree. 🍏")
-print("But it is inhaitated with a monkey! 🐒 The monkey is guarding the apples and looks very angry!")
-print("The monkey is very strong and will attack you if you try to take the apples.")
-action3 = input("What do you want to do? Enter: fight , talk to the monkey or move forward ").strip().lower()
+    def show_intro(self):
+        self.set_story(
+            "Welcome to Apple Quest!\n\nThe forest is alive with whispers, and your journey begins with a brave heart. Type your name and join the adventure as John, the young hero who must gather apples before winter arrives.",
+            [("Begin", self.start_adventure)],
+        )
 
-if action3 == "fight":
-    if strength > 10:
-        print("You fought bravely and defeated the monkey! 🏆")
-        health -= 5
-        apples += 5
-    else:
-        print("You tried to fight the monkey but it was too strong! 😢")
-        health -= 10
-elif action3 == "talk to the monkey":
-    print("You tried to talk to the monkey but it didn't understand you. 😅")
-    print("But it attacked you with 3 apples! 🍎🍎🍎")
-    apples += 3
-    health -= 1
-elif action3 == "move forward":
-    print("You decided to move forward and avoid the monkey.")
-    health -= 2
+    def start_adventure(self):
+        name_text = self.name_entry.get().strip()
+        if name_text:
+            self.name = name_text
+        self.name_entry.config(state="disabled")
+        self.start_button.config(state="disabled")
+        self.update_status()
+        self.show_potions()
 
+    def show_potions(self):
+        self.set_story(
+            f"Lovely to meet you, {self.name}! The winter is coming, and your family needs apple harvests. Choose a potion to start your journey.",
+            [
+                ("Warrior (+5 str, -5 hp)", lambda: self.choose_potion(5, -5, "Warrior Potion")),
+                ("Woodcutter (+5 hp, -5 str)", lambda: self.choose_potion(-5, 5, "Woodcutter Potion")),
+                ("Quiet Walker (-3 str, +3 hp)", lambda: self.choose_potion(-3, 3, "Quiet Walker Potion")),
+            ],
+        )
 
-print(f"Your health is now {health}.")
-print(f"You have {apples} apples.")
+    def choose_potion(self, str_change, hp_change, potion_name):
+        self.strength += str_change
+        self.health += hp_change
+        self.update_status()
+        self.set_story(
+            f"You drink the {potion_name}. A warm glow rushes through you, and the path ahead looks clearer.\n\nStrength: {self.strength} | Health: {self.health}\n\nYou step into the forest. Birds sing overhead, and suddenly a wild boar bursts from the underbrush!",
+            [
+                ("Fight", lambda: self.boar_scene("fight")),
+                ("Run", lambda: self.boar_scene("run")),
+                ("Hide", lambda: self.boar_scene("hide")),
+            ],
+        )
 
-print("It getting darker and you must return home before it gets dark. 🌅")
-
-print("you decide to take a shortcut through the forest. 🌲")
-print("But the shortcut is full of dangerous creatures and obstacles. 🐍")
-print("And you run into a man? He looks like a wizard! 🧙‍♂️")
-print("No! he is a forest dweller! He looks very angry and is blocking your path. 😡")
-print("he is eyeing your apples!")
-print("what do you do?")
-action4 = input("Enter: fight, run or talk to the forest dweller ").strip().lower()
-
-if action4 == "fight":
-    if strength > 10:
-        print("You fought bravely and defeated the forest dweller! 🏆")
-        health -= 5
-    else:
-        print("You tried to fight the forest dweller but it was too strong! 😢")
-        health -= 10
-        apples -= 3
-elif action4 == "run":
-    print("You ran away safely, but you dropped some apples. 🍎")
-    health -= 2
-    apples -= 2
-elif action4 == "talk to the forest dweller":
-    print("You tried to talk to the forest dweller and he understood you. 😅")
-    print("he let you pass and even gave yousome of his apples! 🍎🍎🍎")
-    apples += 3
-    health -= 1
-
-
-print("you sit down under a tree and rest for a while.  🌳  ")
-print("you start counting your apples ")
-if apples >= 10:
-    print(f"You have {apples} apples!")
-    print("You have enough apples to help your family survive the harsh winter! ❄️")
-else : 
-    print(f"You have {apples} apples!")
-    print("You don't have enough apples to help your family survive the harsh winter. 😢")
-
-   
-    
-
-cont = input("do you want to continue your apples journey or go home?\n enter continue or home: ").strip().lower()
-
-if cont == "continue":
-    print("You decide to continue your journey.")
-    print("You continue your journey through the forest and find a clearing with a beautiful apple tree. 🍏")
-    print("you decide you will get as many apples you can and head home since it is dark.")
-    print("as you climb the tree , you find a nest with a baby bird! 🐦")
-    print("awww! you say but the mother attack you with her beak.")
-    print("you try to fight her off but she is too strong! 😢")
-    action5 = input("What do you want to do? Enter: fight, run or talk to the mother bird ").strip().lower()
-    if action5 == "fight":
-        if strength > 10:
-            print("You fought bravely and defeated the mother bird! 🏆")
-            health -= 5
-            apples += 5
+    def boar_scene(self, action):
+        if action == "fight":
+            if self.strength > 15:
+                self.health -= 5
+                result = "You stand your ground and the boar retreats deeper into the forest."
+            else:
+                self.health -= 10
+                result = "The boar charges you hard — you escape, but you feel the sting of its tusks."
+        elif action == "run":
+            self.health -= 2
+            result = "You dash away through fallen leaves and keep your apples safe."
         else:
-            print("You tried to fight the mother bird but it was too strong! 😢")
-            health -= 10
-    elif action5 == "run":
-        print("You ran away safely, but you dropped some apples. 🍎")
-        health -= 2
-        apples -= 2
-    elif action5 == "talk to the mother bird":
-        print("You tried to talk to the mother bird and she understood you. 😅")
-        print("she let you pass and you collect 6 apples! 🍎🍎🍎")
-        apples += 6
-        health -= 1
+            self.health -= 1
+            result = "You melt into the shadows, and the boar passes by without seeing you."
 
-        print("you climb down the tree and head home with your apples. 🏡")
-        print("Your family is very happy to see you and your apples. 🍎")
-        print(f"You have {apples} apples!")
-    if apples >= 10:
-        print(f"You have {apples} apples!")
-        print("You have enough apples to help your family survive the harsh winter! ❄️")
-        print("You continue your journey to home.")
-        print("You finally reach home safely with your apples. 🏡")
-        print("You won the game")
-    else:
-        print(f"You have {apples} apples!")
-        print("You don't have enough apples to help your family survive the harsh winter. 😢")
-        print("You continue your journey to home.")
-        print("You finally reach home safely with your apples. 🏡")
-        print("you lost the game. ")
+        self.update_status()
+        self.set_story(
+            f"{result}\n\nThe forest light dims. Ahead, a tall apple tree waits with glowing fruit high above.",
+            [
+                ("Climb", lambda: self.tree_scene("climb")),
+                ("Shake", lambda: self.tree_scene("shake")),
+                ("Use the sword", lambda: self.tree_scene("sword")),
+            ],
+        )
 
-elif cont == "home":
-    print("You decide to go home.")
-    print("You return home safely with your apples. 🏡")
-    print("Your family is very happy to see you and your apples. 🍎")
-    if apples >= 10:
-        print("You have enough apples to help your family survive the harsh winter! ❄️")
-        print("You won the game")
-    else:
-        print("You don't have enough apples to help your family survive the harsh winter. 😢")
-        print("You lost the game. ")
+    def tree_scene(self, choice):
+        if choice == "climb":
+            if self.strength > 15:
+                self.health -= 2
+                self.apples += 5
+                result = "You climb carefully and gather ripe apples from the top."
+            else:
+                self.health -= 10
+                result = "The branch breaks and you tumble down."
+        elif choice == "shake":
+            self.health -= 1
+            self.apples += 3
+            result = "The tree shakes free a nice bundle of apples."
+        else:
+            self.health -= 3
+            self.apples += 4
+            result = "A smart cut drops apples safely into your arms."
+
+        self.update_status()
+        self.set_story(
+            f"{result}\n\nThrough the mist, you see a playful monkey perched on a branch, guarding a second cluster of apples.",
+            [
+                ("Approach", lambda: self.monkey_scene("talk")),
+                ("Brave", lambda: self.monkey_scene("fight")),
+                ("Avoid", lambda: self.monkey_scene("move")),
+            ],
+        )
+
+    def monkey_scene(self, action):
+        if action == "fight":
+            if self.strength > 10:
+                self.health -= 5
+                self.apples += 5
+                result = "You outwit the monkey and gain extra apples."
+            else:
+                self.health -= 10
+                result = "The monkey proves too strong and you retreat."
+        elif action == "talk":
+            self.health -= 1
+            self.apples += 3
+            result = "The monkey shares fruit after you speak kindly."
+        else:
+            self.health -= 2
+            result = "You slip by quietly and continue onward."
+
+        self.update_status()
+        self.set_story(
+            f"{result}\n\nThe forest darkens, and a wise dweller blocks your path.",
+            [
+                ("Challenge", lambda: self.dweller_scene("fight")),
+                ("Retreat", lambda: self.dweller_scene("run")),
+                ("Speak", lambda: self.dweller_scene("talk")),
+            ],
+        )
+
+    def dweller_scene(self, action):
+        if action == "fight":
+            if self.strength > 10:
+                self.health -= 5
+                result = "You meet the dweller bravely and earn his respect."
+            else:
+                self.health -= 10
+                self.apples = max(0, self.apples - 3)
+                result = "The dweller proves too strong and you lose some apples."
+        elif action == "run":
+            self.health -= 2
+            self.apples = max(0, self.apples - 2)
+            result = "You slip away safely, but some apples fall."
+        else:
+            self.health -= 1
+            self.apples += 3
+            result = "The dweller understands you and gives you apples."
+
+        self.update_status()
+        self.set_story(
+            f"{result}\n\nA hidden path opens up — do you continue deeper or head home?",
+            [
+                ("Deeper", self.bird_choice),
+                ("Home", self.conclude_game),
+            ],
+        )
+
+    def bird_choice(self):
+        self.set_story(
+            "You reach a hidden grove where a mother bird protects a nest filled with sparkling apples. Choose your next step carefully.",
+            [
+                ("Fight", lambda: self.bird_scene("fight")),
+                ("Run", lambda: self.bird_scene("run")),
+                ("Speak gently", lambda: self.bird_scene("talk")),
+            ],
+        )
+
+    def bird_scene(self, action):
+        if action == "fight":
+            if self.strength > 10:
+                self.health -= 5
+                self.apples += 5
+                result = "You bravely fight and earn a handful of apples."
+            else:
+                self.health -= 10
+                result = "The bird proves too strong and you retreat."
+        elif action == "run":
+            self.health -= 2
+            self.apples = max(0, self.apples - 2)
+            result = "You run away and keep most of your apples."
+        else:
+            self.health -= 1
+            self.apples += 6
+            result = "The bird warms to your kindness and gives you fruit."
+
+        self.update_status()
+        self.conclude_game(result)
+
+    def conclude_game(self, final_result=""):
+        if self.apples >= 10:
+            ending = "Your family will survive winter — your adventure was a triumph!"
+            title = "Hero of the Orchard"
+        else:
+            ending = "You return home safely, and your family still feels proud of your journey."
+            title = "Journey Complete"
+
+        self.title_label.config(text=title)
+        self.set_story(
+            f"{final_result}\n\nFinal apples: {self.apples}\nHealth: {self.health}\n\n{ending}",
+            [("Play Again", self.reset_game)],
+        )
+
+    def reset_game(self):
+        self.strength = 20
+        self.health = 20
+        self.apples = 0
+        self.bonus_item = random.choice(["a magical sword", "15 gold coins", "a treasure map"])
+        self.title_label.config(text="Apple Quest")
+        self.name_entry.config(state="normal")
+        self.start_button.config(state="normal")
+        self.update_status()
+        self.show_intro()
+
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    AdventureApp(root)
+    root.mainloop()
+
